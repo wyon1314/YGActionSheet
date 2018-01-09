@@ -2,11 +2,12 @@
 //  ViewController.m
 //  YGActionSheet
 //
-//  Created by 王永刚 on 2018/1/9.
+//  Created by wyon on 2018/1/9.
 //  Copyright © 2018年 wyon. All rights reserved.
 //
 
 #import "ViewController.h"
+#import "YGActionSheetView.h"
 
 @interface ViewController ()
 
@@ -16,13 +17,38 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    for (int i = 0; i < 2; i ++) {
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.view addSubview:button];
+        button.frame = CGRectMake(100, 100 * (i + 1), 100, 50);
+        
+        [button setTitle:[NSString stringWithFormat:@"%d", i] forState:UIControlStateNormal];
+        button.backgroundColor = [UIColor redColor];
+        button.tag = 11 + i;
+        [button addTarget:self action:@selector(showSheetView:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
 }
 
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)showSheetView:(UIButton *)sender {
+    
+    YGActionSheetType type;
+    if (sender.tag == 11) {
+        type = YGActionSheetTypeDefault;
+    } else {
+        type = YGActionSheetTypeNoCancel;
+    }
+    
+    YGActionSheetView *sheetView = [[YGActionSheetView alloc] initWithTitleAry:@[@"title1", @"title2", @"title3", @"title4"] type:type];
+    [sheetView showSheetView];
+    
+    sheetView.sheetBlock = ^(NSString *title) {
+        NSLog(@"%@", title);
+    };
+    
 }
 
 
